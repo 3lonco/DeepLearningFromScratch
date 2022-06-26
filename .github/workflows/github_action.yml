@@ -1,0 +1,47 @@
+#workflowの名前
+name: Shell Commands
+
+#イベントトリガー
+# git  Pushした時にこのワークフローを実行する。
+on : [push]
+
+jobs:
+  # job(任意の名前で良い)
+  run-shell-command:
+    # virtual machineの形式を指定
+    runs-on: ubuntu-latest
+    #strategyはmatrixを使うためのおまじない
+    strategy:
+      #色々なpythonversionをチェックする。
+      matrix:
+        python-version: ["3.6","3.7","3.8","3.9","3.10"]
+    # jobのステップ
+    steps:
+    # ステップ名1
+      - name: echo a string
+        run : echo "Hello World"
+      #step2 
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{matrix.python-version}}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{matrix.python-version}}
+      
+      - name: Install poetry
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+      - name: Poetry Version
+        run: |
+          poetry --version
+      - name: Poetry Install Dependencies
+        run: |
+          poetry install --no-interaction
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        run: poetry run pytest -vv
+
