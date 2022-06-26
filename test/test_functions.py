@@ -12,14 +12,15 @@ import numpy as np
 import pytest
 import load_mnist
 
+
 def test_cross_entropy_error_1():
     # normal test
     # define 2 as correct
     t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
     y = [0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]
     ans = some_function.cross_entropy_error(np.array(y), np.array(t))
-    #print(ans)
-    #np.testing.assert_array_almost_equal(ans, 0.51082545, decimal=1)
+    # print(ans)
+    # np.testing.assert_array_almost_equal(ans, 0.51082545, decimal=1)
 
 
 def test_mean_squared_error():
