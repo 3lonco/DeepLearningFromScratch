@@ -10,7 +10,7 @@ sys.path.append(
 import some_function
 import numpy as np
 import pytest
-
+import load_mnist
 
 def test_cross_entropy_error_1():
     # normal test
@@ -31,7 +31,7 @@ def test_mean_squared_error():
 
 
 def test_neural_net():
-    x, t = some_function.get_data()
+    x, t = get_data()
     network = init_network()
     accuracy_cnt = 0
     for i in range(len(x)):
@@ -43,7 +43,7 @@ def test_neural_net():
 
 
 def test_neural_net_test():
-    x, t = some_function.get_data()
+    x, t = get_data()
     batch_size = 100  # the number of batch
     network = init_network()
     accuracy_cnt = 0
