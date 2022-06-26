@@ -13,6 +13,26 @@ import pytest
 import load_mnist
 
 
+def function_2(x):
+    return x[0] ** 2 + x[1] ** 2
+
+
+def test_gradient_descent():
+    # Check if the minum value of f = x^2 + y^2 is almost equal to 0
+    init_x = np.array([-3.0, 4.0])
+    ans = np.array([0.0, 0.0])
+    grad = some_function.gradient_descent(
+        function_2, init_x=init_x, lr=0.1, step_num=100
+    )
+    np.testing.assert_array_almost_equal(ans, grad)
+
+
+def test_numerical_gradient():
+    ans = np.array([6.0, 8.0])
+    grad = some_function.numerical_gradient(function_2, np.array([3.0, 4.0]))
+    assert grad.all() == ans.all()
+
+
 def test_cross_entropy_error_1():
     # normal test
     # define 2 as correct
