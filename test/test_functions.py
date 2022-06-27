@@ -29,7 +29,7 @@ def test_gradient_descent():
 
 def test_numerical_gradient():
     ans = np.array([6.0, 8.0])
-    grad = some_function.numerical_gradient(function_2, np.array([3.0, 4.0]))
+    grad = some_function.numerical_gradient_1d(function_2, np.array([3.0, 4.0]))
     assert grad.all() == ans.all()
 
 
