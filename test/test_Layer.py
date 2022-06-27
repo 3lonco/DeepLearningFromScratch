@@ -12,6 +12,65 @@ import some_Layer
 import load_mnist
 
 
+def test_prediction():
+    (x_train, t_train), (x_test, t_test) = load_mnist.load_mnist(
+        normalize=True, one_hot_label=True
+    )
+    network = some_Layer.TwoLayerNet(input_size=784, hidden_size=3, output_size=10)
+    # Hyper parameter
+    iters_num = 2
+    train_size = x_train.shape[0]
+    batch_size = 2
+    learning_rate = 0.1
+
+    train_loss_list = []
+    train_acc_list = []
+    test_acc_list = []
+
+    iter_per_epoch = max(train_size / batch_size, 1)
+
+    for i in range(iters_num):
+        batch_mask = np.random.choice(train_size, batch_size)
+        # Get mini batch
+        x_batch = x_train[batch_mask]
+        t_batch = t_train[batch_mask]
+
+        grad = network.gradient(x_batch, t_batch)  #
+
+        # Renew parameters
+        for key in ("W1", "b1", "W2", "b2"):
+            network.params[key] -= learning_rate * grad[key]
+
+        # Record the learning process
+        loss = network.loss(x_batch, t_batch)
+        train_loss_list.append(loss)
+
+        if i % iter_per_epoch == 0:
+            train_acc = network.accuracy(x_train, t_train)
+            test_acc = network.accuracy(x_test, t_test)
+            train_acc_list.append(train_acc)
+            test_acc_list.append(test_acc)
+            print("Train_ACCURACY:", train_acc, "TEST_ACCURACY:", test_acc)
+
+
+def test_affinelayer():
+    (x_train, t_train), (x_test, t_test) = load_mnist.load_mnist(
+        normalize=True, one_hot_label=True
+    )
+    network = some_Layer.TwoLayerNet(input_size=784, hidden_size=2, output_size=10)
+    x_batch = x_train[:3]
+    t_batch = t_train[:3]
+    grad_numerical = network.numerical_gradient(x_batch, t_batch)
+    grad_backdrop = network.gradient(x_batch, t_batch)
+    sum = 0
+    for key in grad_numerical.keys():
+        diff = np.average(np.abs(grad_backdrop[key] - grad_numerical[key]))
+        sum += diff
+        print(key + ":" + str(diff))
+    eps = 1e-01
+    assert sum < eps
+
+
 def test_sigmoidLayer():
     sigmoid_layer = some_Layer.Sigmoid()
     # create the values only with nagative values
