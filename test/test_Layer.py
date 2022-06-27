@@ -19,8 +19,9 @@ def test_sigmoidLayer():
     y = sigmoid_layer.forward(x)
     assert y.all() >= 0
 
+
 def test_ReLULayer():
-    ReLu_layer=some_Layer.Relu()
+    ReLu_layer = some_Layer.Relu()
     # create the values only with nagative values
     x = np.array([-100.0, 100, -1.5])
     y = ReLu_layer.forward(x)
